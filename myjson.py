@@ -58,7 +58,8 @@ class Parser:
         return ""
 
     def consume(self, char):
-        if (self.currPos < len(self.data)) and (self.data[self.currPos] == char):
+        if (self.currPos < len(self.data)) and (self.data[self.currPos]
+                                                == char):
             self.currPos += 1
             return True
         return False
@@ -84,7 +85,7 @@ class Parser:
             self.currPos += 1
 
         self.consume('"')
-        return self.data[start : self.currPos - 1]
+        return self.data[start:self.currPos - 1]
 
     def parseNumber(self):
         length = len(self.data)
@@ -92,15 +93,15 @@ class Parser:
         while self.currPos < length:
             if self.data[self.currPos].isdigit():
                 self.currPos += 1
-            elif (self.data[self.currPos] == ".") or (self.data[self.currPos] == "-"):
+            elif (self.data[self.currPos] == ".") or (self.data[self.currPos]
+                                                      == "-"):
                 self.currPos += 1
             else:
                 break
 
-        return self.data[start : self.currPos]
+        return self.data[start:self.currPos]
 
     def parseObject(self):
-        length = len(self.data)
         retVal = JSObject()
         key = ""
         value = JSObject("", JValue(0, ""))
@@ -117,6 +118,20 @@ class Parser:
             value = self.parseValue()
             retVal.add(key, value)
             # print(retVal)
+            self.consumeWhiteSpace()
+            self.consume(",")
+
+    def parseArray(self):
+        self.consumeWhiteSpace()
+        self.consume("[")
+        values = []
+
+        while True:
+            self.consumeWhiteSpace()
+            if self.consume("]"):
+                return values
+            values.append(self.parseValue())
+            #print(values)
             self.consumeWhiteSpace()
             self.consume(",")
 

@@ -6,7 +6,7 @@ class TestMyJsonMethods(unittest.TestCase):
     def test_comsumeWhiteSpace(self):
         uat = Parser("   \n\t  werp")
         uat.consumeWhiteSpace()
-        self.assertEqual("werp", uat.data[uat.currPos :])
+        self.assertEqual("werp", uat.data[uat.currPos:])
 
     def test_parseQuotedString(self):
         uat = Parser('"key":')
@@ -40,7 +40,6 @@ class TestMyJsonMethods(unittest.TestCase):
         uat = Parser('{ "red" : 1, "green" : 2, "yellow": 3 }')
         result = uat.parseObject()
 
-        print(result)
         self.assertEqual("red", list(result.data)[0])
         self.assertEqual("1", result.data["red"].getValue())
         self.assertEqual(JType.JNumber, result.data["red"].getType())
@@ -52,6 +51,24 @@ class TestMyJsonMethods(unittest.TestCase):
         self.assertEqual("yellow", list(result.data)[2])
         self.assertEqual("3", result.data["yellow"].getValue())
         self.assertEqual(JType.JNumber, result.data["yellow"].getType())
+
+    def test_parseSimpleArray(self):
+        uat = Parser('[1,2,3,4,5]')
+        result = uat.parseArray()
+
+        #print(result)
+        self.assertEqual("1", result[0].getValue())
+        self.assertEqual(JType.JNumber, result[0].getType())
+
+    def test_parseArray(self):
+        uat = Parser('{ "arr": [10,20,30,40,50]}')
+        result = uat.parseObject()
+
+        #print(result)
+        self.assertEqual("arr", list(result.data)[0])
+        self.assertEqual(JType.JArray, result.data["arr"].getType())
+        self.assertEqual(JType.JNumber,
+                         result.data["arr"].getValue()[0].getType())
 
 
 if __name__ == "__main__":
