@@ -2,6 +2,8 @@
 
 from enum import Enum
 
+# trying to implement a json parsing for learning
+# got desing ideas from  serenity os jsonparser
 
 class JType(Enum):
     JString = 1
